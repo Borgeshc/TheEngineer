@@ -25,7 +25,7 @@ public class PlaceTurret : MonoBehaviour
 		{
 			if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100, layerMask))
 			{
-				if(hit.collider.name == "Ground")
+				if(hit.collider.tag == "Ground")
 					{
 						if (placedTurrets < maxTurrets && !placingTurret) 
 						{
