@@ -16,7 +16,7 @@ public class EnemyAI : MonoBehaviour
 
 	void Start()
 	{
-		player = GameObject.Find ("Player");
+		player = GameObject.FindGameObjectWithTag ("Player");
 		playerHealth = player.GetComponent<Health> ();
 	}
 

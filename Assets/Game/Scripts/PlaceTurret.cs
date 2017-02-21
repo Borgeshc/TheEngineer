@@ -23,10 +23,10 @@ public class PlaceTurret : MonoBehaviour
 
 		if (canPlace && Input.GetMouseButtonDown(0)) 
 		{
-			if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100, layerMask))
+			if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000, layerMask))
 			{
 				if(hit.collider.tag == "Ground")
-					{
+				{
 						if (placedTurrets < maxTurrets && !placingTurret) 
 						{
 							placingTurret = true;

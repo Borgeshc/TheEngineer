@@ -4,29 +4,40 @@ using UnityEngine;
 
 public class Zoom : MonoBehaviour 
 {
-	float previousDistance;
-	float zoomSpeed = 1.0f;
+	public float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
+	Camera camera;
 
-	void Update () 
+	void Start()
 	{
-		if (Input.touchCount == 2 && (Input.GetTouch (0).phase == TouchPhase.Began ||
-		    Input.GetTouch (1).phase == TouchPhase.Began)) {
-			//calibrate the distance
-			previousDistance = Vector2.Distance (Input.GetTouch (0).position, Input.GetTouch (1).position);
-		} else if (Input.touchCount == 2 && (Input.GetTouch (0).phase == TouchPhase.Moved ||
-		         Input.GetTouch (1).phase == TouchPhase.Moved)) 
+		camera = Camera.main;
+	}
+
+	void Update()
+	{
+		// If there are two touches on the device...
+		if (Input.touchCount == 2)
 		{
-			float distance;
-			Vector2 touch1 = Input.GetTouch (0).position;
-			Vector2 touch2 = Input.GetTouch (1).position;
+			// Store both touches.
+			Touch touchZero = Input.GetTouch(0);
+			Touch touchOne = Input.GetTouch(1);
 
-			distance = Vector2.Distance (touch1, touch2);
+			// Find the position in the previous frame of each touch.
+			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+			Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
-			//camera based on pinch/zoom
-			float pinchAmount = (previousDistance - distance) * zoomSpeed * Time.deltaTime;
-			pinchAmount = Mathf.Clamp (pinchAmount, -10, 5);
-			transform.Translate (0, 0, -pinchAmount);
-			previousDistance = distance;
+			// Find the magnitude of the vector (the distance) between the touches in each frame.
+			float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+			float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+			// Find the difference in the distances between each frame.
+			float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+
+		
+				// Otherwise change the field of view based on the change in distance between the touches.
+				camera.fieldOfView += deltaMagnitudeDiff * perspectiveZoomSpeed;
+
+				// Clamp the field of view to make sure it's between 0 and 180.
+				camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, 5f, 73f);
 		}
 	}
 }
