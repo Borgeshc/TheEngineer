@@ -14,17 +14,21 @@ public class EnemyAI : MonoBehaviour
 	Health playerHealth;
 	bool attacking;
 
+	Animator anim;
+
 	void Start()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player");
 		playerHealth = player.GetComponent<Health> ();
+		anim = GetComponentInChildren<Animator> ();
 	}
 
 	void Update()
 	{
-		if (player.activeInHierarchy && player != null) {
+		if (player.activeInHierarchy) 
+		{
 			transform.LookAt (player.transform);
-			if (transform.position.z - player.transform.position.z > stoppingDistance) {
+			if (Vector3.Distance(transform.position, player.transform.position) > stoppingDistance) {
 				transform.Translate (Vector3.forward * speed * Time.deltaTime);
 			}
 		}

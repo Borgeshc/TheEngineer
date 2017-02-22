@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaceTurret : MonoBehaviour 
+public class PlaceObject : MonoBehaviour 
 {
 	public LayerMask layerMask;
 	public GameObject turret;
 	public int maxTurrets;
-	int placedTurrets;
-	bool placingTurret;
+	int placedObjects;
+	bool placingObject;
 	public bool canPlace;
 	public List<GameObject> activeTurrets;
 	RaycastHit hit;
@@ -27,29 +27,29 @@ public class PlaceTurret : MonoBehaviour
 			{
 				if(hit.collider.tag == "Ground")
 				{
-						if (placedTurrets < maxTurrets && !placingTurret) 
+					if (placedObjects < maxTurrets && !placingObject) 
 						{
-							placingTurret = true;
-							placedTurrets++;
+							placingObject = true;
+							placedObjects++;
 							GameObject newTurret = Instantiate (turret, transform.position, transform.rotation) as GameObject;
 							activeTurrets.Add (newTurret);
 							newTurret.transform.position = new Vector3 (hit.point.x, newTurret.transform.localScale.y * .05f, hit.point.z);
-							placingTurret = false;	
+							placingObject = false;	
 						} 
-						else if (activeTurrets.Count == maxTurrets && !placingTurret) 
+						else if (activeTurrets.Count == maxTurrets && !placingObject) 
 						{
 							//Overrite and destroy the old turret
 							Destroy (activeTurrets [0]);
 							activeTurrets.Remove (activeTurrets [0]);
-							placedTurrets--;
+							placedObjects--;
 
 							//Spawn the new turret
-							placingTurret = true;
-							placedTurrets++;
+							placingObject = true;
+							placedObjects++;
 							GameObject newTurret = Instantiate (turret, transform.position, transform.rotation) as GameObject;
 							activeTurrets.Add (newTurret);
 							newTurret.transform.position = new Vector3 (hit.point.x, newTurret.transform.localScale.y * .05f, hit.point.z);
-							placingTurret = false;	
+							placingObject = false;	
 						}
 
 				}
