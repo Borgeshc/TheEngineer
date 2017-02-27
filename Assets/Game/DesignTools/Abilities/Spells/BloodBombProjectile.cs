@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour 
+public class BloodBombProjectile : MonoBehaviour 
 {
-	GameObject target;
-	float speed;
-	int damage;
+	public float speed;
+	public int damage;
 	bool applyingDamage;
+	GameObject player;
 
+	void Start()
+	{
+		player = GameObject.Find ("Player");
+	}
 	void Update()
 	{
-		transform.LookAt (target.transform);
-		transform.Translate (transform.forward * speed * Time.deltaTime);
+		transform.Translate (player.transform.forward * speed * Time.deltaTime);
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -26,12 +29,5 @@ public class Projectile : MonoBehaviour
 				Destroy (gameObject);
 			}
 		}
-	}
-
-	public void ApplyVariables(GameObject _enemy, int _damage, float _speed)
-	{
-		target = _enemy;
-		speed = _speed;
-		damage = _damage;
 	}
 }
