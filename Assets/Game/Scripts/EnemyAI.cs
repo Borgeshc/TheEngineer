@@ -13,19 +13,20 @@ public class EnemyAI : MonoBehaviour
 
 	Health playerHealth;
 	bool attacking;
-
+	Health myHealth;
 	Animator anim;
 
 	void Start()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player");
 		playerHealth = player.GetComponent<Health> ();
+		myHealth = GetComponent<Health> ();
 		anim = GetComponentInChildren<Animator> ();
 	}
 
 	void Update()
 	{
-		if (player.activeInHierarchy) 
+		if (player.activeInHierarchy && myHealth.health > 0) 
 		{
 			transform.LookAt (player.transform);
 			if (Vector3.Distance(transform.position, player.transform.position) > stoppingDistance) {

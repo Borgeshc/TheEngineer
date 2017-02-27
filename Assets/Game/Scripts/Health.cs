@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour 
 {
+	public Animator deathAnim;
+	public float deathTime;
 	public float maxHealth;
 	public bool hasHealthBar;
 	public Image healthBar;
-
-	float health;
+	[HideInInspector]
+	public float health;
 
 	void Start()
 	{
@@ -25,17 +27,20 @@ public class Health : MonoBehaviour
 		
 		if (health <= 0) 
 		{
-			Died ();
+			StartCoroutine(Died ());
 		}
 	}
 
-	void Died()
+	IEnumerator Died()
 	{
 		if (transform.tag == "Enemy" && TargetObject.target == this.gameObject) 
 		{
 			transform.GetComponent<SetTarget> ().NotTargeted ();
 			TargetObject.target = null;
 		}
+
+		deathAnim.SetBool ("Died", true);
+		yield return new WaitForSeconds (deathTime);
 		Destroy (gameObject);
 	}
 }

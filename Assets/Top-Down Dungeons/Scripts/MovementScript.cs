@@ -35,10 +35,10 @@ public class MovementScript : MonoBehaviour
 				cc.Move (Vector3.zero);
 			} else 
 			{
-				if (Input.mousePosition.x > middleOfScreen.x + (Screen.width * .45f)
-				   || Input.mousePosition.y > middleOfScreen.y + (Screen.height * .45f)
-				   || Input.mousePosition.x < middleOfScreen.x + (Screen.width * -.45f)
-				   || Input.mousePosition.y < middleOfScreen.y + (Screen.height * -.45f)) 
+				if (Input.mousePosition.x > middleOfScreen.x + (Screen.width * .3f)
+				   || Input.mousePosition.y > middleOfScreen.y + (Screen.height * .3f)
+				   || Input.mousePosition.x < middleOfScreen.x + (Screen.width * -.3f)
+				   || Input.mousePosition.y < middleOfScreen.y + (Screen.height * -.3f)) 
 				{
 					anim.SetBool ("IsWalking", true);
 					cc.Move (transform.forward * speed * Time.deltaTime);
