@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour 
 {
-	public int maxHealth;
-	int health;
+	public float maxHealth;
+	public bool hasHealthBar;
+	public Image healthBar;
+
+	float health;
 
 	void Start()
 	{
@@ -16,6 +20,9 @@ public class Health : MonoBehaviour
 	{
 		health = health - damage;
 
+		if (hasHealthBar)
+			healthBar.fillAmount = (health / maxHealth);
+		
 		if (health <= 0) 
 		{
 			Died ();
@@ -24,6 +31,11 @@ public class Health : MonoBehaviour
 
 	void Died()
 	{
+		if (transform.tag == "Enemy" && TargetObject.target == this.gameObject) 
+		{
+			transform.GetComponent<SetTarget> ().NotTargeted ();
+			TargetObject.target = null;
+		}
 		Destroy (gameObject);
 	}
 }
