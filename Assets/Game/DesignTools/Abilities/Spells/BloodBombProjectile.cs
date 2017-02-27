@@ -6,7 +6,6 @@ public class BloodBombProjectile : MonoBehaviour
 {
 	public float speed;
 	public int damage;
-	bool applyingDamage;
 	GameObject player;
 
 	void Start()
@@ -16,18 +15,14 @@ public class BloodBombProjectile : MonoBehaviour
 	void Update()
 	{
 		transform.Translate (player.transform.forward * speed * Time.deltaTime);
+		Destroy (gameObject, 5);
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Enemy") 
 		{
-			if (!applyingDamage) 
-			{
-				applyingDamage = true;
-				other.GetComponent<Health> ().TookDamage (damage);
-				Destroy (gameObject);
-			}
+			other.GetComponent<Health> ().TookDamage (damage);
 		}
 	}
 }

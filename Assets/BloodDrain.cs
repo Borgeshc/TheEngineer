@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BloodDrain : MonoBehaviour 
 {
+	public static bool bloodDrainActive;
 	public GameObject bloodDrainObject;
 	public int damage;
 	public float attackFreq;
@@ -12,18 +14,22 @@ public class BloodDrain : MonoBehaviour
 	bool liningAnim;
 	bool attacking;
 	AudioSource source;
+	SiphonedBlood siphonedBlood;
 
 	void Start()
 	{
+		siphonedBlood = GameObject.Find ("SiphonedBlood").GetComponent<SiphonedBlood> ();
 		source = bloodDrainObject.GetComponent<AudioSource> ();
 		line = bloodDrainObject.GetComponent<LineRenderer> ();
 		line.enabled = false;
 	}
 	void Update () 
 	{
-		if (Input.GetKey (KeyCode.Mouse0) && TargetObject.target != null) 
+		if (Input.GetKey (KeyCode.Mouse0) && TargetObject.target != null && !BloodBomb.bloodBombActive) 
 		{
+			bloodDrainActive = true;
 			MovementScript.canMove = false;
+			MovementScript.canRotate = false;
 			transform.LookAt (TargetObject.target.transform);
 			anim.SetBool ("BloodDrain", true);
 			if (!liningAnim) 
@@ -47,7 +53,12 @@ public class BloodDrain : MonoBehaviour
 		}
 		else 
 		{
-			MovementScript.canMove = true;
+			if (!BloodBomb.bloodBombActive) 
+			{
+				MovementScript.canMove = true;
+				MovementScript.canRotate = true;
+			}
+			bloodDrainActive = false;
 			anim.SetBool ("BloodDrain", false);
 			line.enabled = false;
 		}
@@ -63,6 +74,7 @@ public class BloodDrain : MonoBehaviour
 	IEnumerator Attack(GameObject enemy)
 	{
 		enemy.GetComponent<Health> ().TookDamage (damage);
+		siphonedBlood.SipponeBlood (damage);
 		yield return new WaitForSeconds (attackFreq);
 		attacking = false;
 	}

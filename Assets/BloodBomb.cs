@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class BloodBomb : MonoBehaviour 
 {
+	public static bool bloodBombActive;
 	public GameObject bloodBomb;
 	public GameObject bloodBombSpawn;
 	public GameObject castEffect1;
 	public GameObject castEffect2;
-
+	public float abilityCost;
 	public Animator anim;
 	bool casting;
 	bool onCooldown;
+	SiphonedBlood siphonedBlood;
 
+	void Start()
+	{
+		siphonedBlood = GameObject.Find ("SiphonedBlood").GetComponent<SiphonedBlood> ();
+	}
 	void Update () 
 	{
-		if(Input.GetKeyDown(KeyCode.Mouse1) && !casting && !onCooldown)
+		if(Input.GetKeyDown(KeyCode.Mouse1) && !casting && !onCooldown && !BloodDrain.bloodDrainActive && siphonedBlood.siphonedBlood >= abilityCost)
 		{
+			siphonedBlood.UseBlood (abilityCost);
+			bloodBombActive = true;
+			MovementScript.canMove = false;
 			onCooldown = true;
 			castEffect1.SetActive (true);
 			castEffect2.SetActive (true);
@@ -30,7 +39,8 @@ public class BloodBomb : MonoBehaviour
 	{
 		yield return new WaitForSeconds (1.3f);
 		Instantiate (bloodBomb, bloodBombSpawn.transform.position, transform.rotation);
-
+		bloodBombActive = false;
+		MovementScript.canMove = true;
 		castEffect1.SetActive (false);
 		castEffect2.SetActive (false);
 		anim.SetBool ("BloodBomb", false);
