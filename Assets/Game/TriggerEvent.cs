@@ -12,7 +12,7 @@ public class TriggerEvent : MonoBehaviour
 	{
 		if (other.tag == "Player") 
 		{
-			if (!eventActive) 
+			if (!eventActive && possibleEvents != null) 
 			{
 				TriggerEvent.eventActive = true;
 				possibleEvents [Random.Range (0, possibleEvents.Count)].SetActive (true);

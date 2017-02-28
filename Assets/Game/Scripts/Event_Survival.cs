@@ -23,7 +23,6 @@ public class Event_Survival : MonoBehaviour
 
 	AudioSource source;
 
-
 	void Start ()
 	{
 		timeLeft = survivalTime;

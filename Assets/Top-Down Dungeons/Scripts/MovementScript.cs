@@ -12,10 +12,11 @@ public class MovementScript : MonoBehaviour
 
 	float sensitivity = 2;
 	Vector3 middleOfScreen;
-
+	Health myHealth;
 	
 	void Start()
 	{
+		myHealth = GetComponent<Health> ();
 		canMove = true;
 		canRotate = true;
 		//Cursor.visible = false;
@@ -25,30 +26,33 @@ public class MovementScript : MonoBehaviour
 
 	void Update()
 	{
-		if (canRotate) 
+		if (canRotate && myHealth.health > 0) 
 		{
 			Vector3 camVec = Input.mousePosition - middleOfScreen;
 			Vector3 flipped = new Vector3 (camVec.x, 0f, camVec.y);
 			gameObjectToRotate.LookAt (flipped);
 		}
-		if (Input.GetKey (KeyCode.LeftShift) || !canMove) 
+		if (Input.GetKey (KeyCode.LeftShift) || !canMove && myHealth.health > 0) 
 		{
 			anim.SetBool ("IsWalking", false);
 			cc.Move (Vector3.zero);
 		} 
 		else 
 		{
-			if (Input.mousePosition.x > middleOfScreen.x + (Screen.width * .3f)
-			   || Input.mousePosition.y > middleOfScreen.y + (Screen.height * .3f)
-			   || Input.mousePosition.x < middleOfScreen.x + (Screen.width * -.3f)
-			   || Input.mousePosition.y < middleOfScreen.y + (Screen.height * -.3f)) 
+			if (myHealth.health > 0) 
 			{
-				anim.SetBool ("IsWalking", true);
-				cc.Move (transform.forward * speed * Time.deltaTime);
-			} else 
-			{
-				anim.SetBool ("IsWalking", false);
-				cc.Move (Vector3.zero);
+				if (Input.mousePosition.x > middleOfScreen.x + (Screen.width * .3f)
+					|| Input.mousePosition.y > middleOfScreen.y + (Screen.height * .3f)
+					|| Input.mousePosition.x < middleOfScreen.x + (Screen.width * -.3f)
+					|| Input.mousePosition.y < middleOfScreen.y + (Screen.height * -.3f)) 
+				{
+					anim.SetBool ("IsWalking", true);
+					cc.Move (transform.forward * speed * Time.deltaTime);
+				} else 
+				{
+					anim.SetBool ("IsWalking", false);
+					cc.Move (Vector3.zero);
+				}
 			}
 		}
 	}	

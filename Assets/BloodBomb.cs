@@ -24,9 +24,7 @@ public class BloodBomb : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Mouse1) && !casting && !onCooldown && !BloodDrain.bloodDrainActive && siphonedBlood.siphonedBlood >= abilityCost)
 		{
-			if (!source.isPlaying)
-				source.Play ();
-			
+			source.PlayOneShot (source.clip);
 			siphonedBlood.UseBlood (abilityCost);
 			bloodBombActive = true;
 			MovementScript.canMove = false;
