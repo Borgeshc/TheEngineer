@@ -43,4 +43,9 @@ public class Health : MonoBehaviour
 		yield return new WaitForSeconds (deathTime);
 		Destroy (gameObject);
 	}
+
+	public void GainHealth(float healthGain)
+	{
+		health += healthGain;
+	}
 }

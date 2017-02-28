@@ -37,9 +37,11 @@ public class BloodDrain : MonoBehaviour
 				liningAnim = true;
 				StartCoroutine(LineWithAnim());
 			}
+
 			line.enabled = true;
 			line.SetPosition (0, bloodDrainObject.transform.position);
 			line.SetPosition (1, TargetObject.target.transform.position + new Vector3(0,TargetObject.target.transform.localScale.y *.5f, 0));
+
 			if (!source.isPlaying) 
 			{
 				source.Play ();
@@ -73,6 +75,7 @@ public class BloodDrain : MonoBehaviour
 
 	IEnumerator Attack(GameObject enemy)
 	{
+		GetComponent<Health> ().GainHealth (damage);
 		enemy.GetComponent<Health> ().TookDamage (damage);
 		siphonedBlood.SipponeBlood (damage);
 		yield return new WaitForSeconds (attackFreq);

@@ -37,7 +37,7 @@ public class BloodBomb : MonoBehaviour
 
 	IEnumerator Spawn()
 	{
-		yield return new WaitForSeconds (1.3f);
+		yield return new WaitForSeconds (.8f);
 		Instantiate (bloodBomb, bloodBombSpawn.transform.position, transform.rotation);
 		bloodBombActive = false;
 		MovementScript.canMove = true;

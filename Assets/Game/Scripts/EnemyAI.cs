@@ -26,12 +26,28 @@ public class EnemyAI : MonoBehaviour
 
 	void Update()
 	{
-		if (player.activeInHierarchy && myHealth.health > 0) 
+		if (player.activeInHierarchy && myHealth.health > 0)
 		{
 			transform.LookAt (player.transform);
-			if (Vector3.Distance(transform.position, player.transform.position) > stoppingDistance) {
+			if (Vector3.Distance (transform.position, player.transform.position) > stoppingDistance) {
 				transform.Translate (Vector3.forward * speed * Time.deltaTime);
+			} 
+			else 
+			{
+				if (!attacking) 
+				{
+					attacking = true;
+					StartCoroutine (Attack ());
+				}
 			}
 		}
+	}
+
+	IEnumerator Attack()
+	{
+		anim.SetBool ("Attack", true);
+		player.GetComponent<Health> ().TookDamage (damage);
+		yield return new WaitForSeconds (attackFrequency);
+		attacking = false;
 	}
 }
