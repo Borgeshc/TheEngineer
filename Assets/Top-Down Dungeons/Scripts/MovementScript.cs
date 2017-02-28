@@ -24,7 +24,7 @@ public class MovementScript : MonoBehaviour
 		middleOfScreen = new Vector3(Screen.width/2, Screen.height/2, 0f);
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		if (canRotate && myHealth.health > 0) 
 		{
@@ -47,11 +47,11 @@ public class MovementScript : MonoBehaviour
 					|| Input.mousePosition.y < middleOfScreen.y + (Screen.height * -.3f)) 
 				{
 					anim.SetBool ("IsWalking", true);
-					cc.Move (transform.forward * speed * Time.deltaTime);
+					cc.SimpleMove (transform.forward * speed * Time.deltaTime);
 				} else 
 				{
 					anim.SetBool ("IsWalking", false);
-					cc.Move (Vector3.zero);
+					cc.SimpleMove(Vector3.zero);
 				}
 			}
 		}
