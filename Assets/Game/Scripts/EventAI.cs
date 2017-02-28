@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour 
+public class EventAI : MonoBehaviour 
 {
 	GameObject player;
 	public float speed;
@@ -28,28 +28,32 @@ public class EnemyAI : MonoBehaviour
 
 	void Update()
 	{
-		if (myHealth.health > 0 && player != null) {
-			if (player.activeInHierarchy && myHealth.health > 0) {
+		if (myHealth.health > 0 && player != null)
+        {
+			if (player.activeInHierarchy && myHealth.health > 0)
+            {
 				transform.LookAt (player.transform);
-				if (Vector3.Distance (transform.position, player.transform.position) > stoppingDistance) {
-					//nav.Move (transform.forward * speed * Time.deltaTime);
+				if (Vector3.Distance (transform.position, player.transform.position) > stoppingDistance)
+                {
+                    anim.SetBool("Attack", false);
 					nav.SetDestination (player.transform.position);
-					//transform.Translate (Vector3.forward * speed * Time.deltaTime);
-				} else {
-					print ("Im close");
-					if (!attacking) {
+				}
+                else
+                {
+					if (!attacking)
+                    {
 						attacking = true;
 						StartCoroutine (Attack ());
 					}
 				}
 			}
-		} else
+		}
+        else
 			nav.Stop ();
 	}
 
 	IEnumerator Attack()
 	{
-		print ("Im attacking");
 		anim.SetBool ("Attack", true);
 		player.GetComponent<Health> ().TookDamage (damage);
 		yield return new WaitForSeconds (attackFrequency);
