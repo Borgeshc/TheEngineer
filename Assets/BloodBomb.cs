@@ -5,6 +5,7 @@ using UnityEngine;
 public class BloodBomb : MonoBehaviour 
 {
 	public static bool bloodBombActive;
+	public AudioSource source;
 	public GameObject bloodBomb;
 	public GameObject bloodBombSpawn;
 	public GameObject castEffect1;
@@ -23,6 +24,9 @@ public class BloodBomb : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Mouse1) && !casting && !onCooldown && !BloodDrain.bloodDrainActive && siphonedBlood.siphonedBlood >= abilityCost)
 		{
+			if (!source.isPlaying)
+				source.Play ();
+			
 			siphonedBlood.UseBlood (abilityCost);
 			bloodBombActive = true;
 			MovementScript.canMove = false;

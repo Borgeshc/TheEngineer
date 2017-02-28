@@ -15,7 +15,7 @@ public class BloodBombProjectile : MonoBehaviour
 	void Update()
 	{
 		transform.Translate (player.transform.forward * speed * Time.deltaTime);
-		Destroy (gameObject, 5);
+		Destroy (gameObject, 8);
 	}
 
 	void OnTriggerEnter(Collider other)
