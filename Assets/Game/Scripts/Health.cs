@@ -46,7 +46,7 @@ public class Health : MonoBehaviour
 
 		deathAnim.SetBool ("Died", true);
 		yield return new WaitForSeconds (deathTime);
-		//Destroy (gameObject);
+		Destroy (gameObject);
 	}
 
 	public void GainHealth(float healthGain)
