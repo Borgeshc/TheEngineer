@@ -12,7 +12,7 @@ public class SwingSword : MonoBehaviour
 	bool attacking;
 	int animationType;
 
-	public WeaponDamage weaponDamage;
+	public BoxCollider weaponDamage;
 
 	void Start()
 	{
