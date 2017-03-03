@@ -10,11 +10,11 @@ public class Health : MonoBehaviour
 	public float maxHealth;
 	public bool hasHealthBar;
 	public Image healthBar;
-	[HideInInspector]
 	public float health;
 	public Image deathPanel;
 	public Text deathText;
 	float timer;
+
 	void Start()
 	{
 		health = maxHealth;
@@ -22,6 +22,10 @@ public class Health : MonoBehaviour
 
 	public void TookDamage(int damage)
 	{
+		if (transform.tag == "Player" && Block.isBlocking)
+		{
+			return;
+		}
 		health = health - damage;
 
 		if (hasHealthBar)

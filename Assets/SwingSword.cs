@@ -12,9 +12,12 @@ public class SwingSword : MonoBehaviour
 	bool attacking;
 	int animationType;
 
+	public WeaponDamage weaponDamage;
+
 	void Start()
 	{
 		anim = GetComponent<Animator> ();
+		weaponDamage.enabled = false;
 	}
 	void Update () 
 	{
@@ -24,14 +27,18 @@ public class SwingSword : MonoBehaviour
 			{
 				attacking = true;
 				isSwinging = true;
+				weaponDamage.enabled = true;
 				animationType = Random.Range (1, 4);
 				print (animationType);
 				anim.SetInteger ("SwingSword", animationType);
 				StartCoroutine (Attack ());
 			}
 		} 
-		else
+		else 
+		{
 			isSwinging = false;
+			weaponDamage.enabled = false;
+		}
 	}
 
 	IEnumerator Attack()

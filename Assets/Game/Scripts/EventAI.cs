@@ -55,7 +55,10 @@ public class EventAI : MonoBehaviour
 	IEnumerator Attack()
 	{
 		anim.SetBool ("Attack", true);
+
+		if(player.GetComponent<Health>() != null)
 		player.GetComponent<Health> ().TookDamage (damage);
+		
 		yield return new WaitForSeconds (attackFrequency);
 		attacking = false;
 	}
