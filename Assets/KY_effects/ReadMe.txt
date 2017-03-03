@@ -3,12 +3,12 @@ Thank you for the purchase of assets!
 Test scene location
  “KY_effects”
   -“Scene”
-   -“Demo_AMFX03”
+   -“Demo_AMFX02”
 
 
 FX location
  “KY_effects”
-  -“AMFX03”
+  -“AMFX02”
 
 
 

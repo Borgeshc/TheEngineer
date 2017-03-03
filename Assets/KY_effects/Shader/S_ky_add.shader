@@ -108,8 +108,10 @@ Shader "KY/add" {
                 float4 _MainTex_var = tex2D(_MainTex,TRANSFORM_TEX(node_580, _MainTex));
                 float node_1439 = 0.0;
                 float node_7000 = ((lerp( _MainTex_var.r, node_1439, _notUseRch )+lerp( _MainTex_var.g, node_1439, _notUseGch )+lerp( _MainTex_var.b, node_1439, _notUseBch ))/_channelDivid);
+                float node_6104 = 1.0;
                 float node_3520 = pow(1.0-max(0,dot(normalDirection, viewDirection)),_fresPower);
-                float3 emissive = (lerp( pow(node_7000,_baseTexDensity), pow(_MainTex_var.rgb,_baseTexDensity), _useTexColor )*_emissive*i.vertexColor.rgb*((pow(lerp( node_7000, _MainTex_var.a, _haveAlpha ),_alphaDensity)*_alphaPower)*i.vertexColor.a*saturate(pow((i.vertexColor.r+i.vertexColor.g+i.vertexColor.b),_vertColorDensity))*lerp( 1.0, saturate((sceneZ-partZ)/_depthBlend), _useDepthBlend )*lerp( 1.0, lerp( node_3520, (1.0 - node_3520), _fresInv ), _useFresnel )));
+                float _fresInv_var = lerp( node_3520, (1.0 - node_3520), _fresInv );
+                float3 emissive = (lerp( pow(node_7000,_baseTexDensity), pow(_MainTex_var.rgb,_baseTexDensity), _useTexColor )*_emissive*i.vertexColor.rgb*((pow(lerp( node_7000, _MainTex_var.a, _haveAlpha ),_alphaDensity)*_alphaPower)*i.vertexColor.a*saturate(pow((i.vertexColor.r+i.vertexColor.g+i.vertexColor.b),_vertColorDensity))*lerp( 1.0, saturate((sceneZ-partZ)/_depthBlend), _useDepthBlend )*lerp( node_6104, _fresInv_var, _useFresnel )));
                 float3 finalColor = emissive;
                 return fixed4(finalColor,1);
             }
