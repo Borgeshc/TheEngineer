@@ -38,7 +38,7 @@ public class ProximityAI : MonoBehaviour
                     if (Vector3.Distance(transform.position, player.transform.position) > stoppingDistance)
                     {
                         anim.SetBool("Attack", false);
-                        nav.SetDestination(player.transform.position);
+						nav.SetDestination(player.transform.position);
                     }
                     else
                     {
