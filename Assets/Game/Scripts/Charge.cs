@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Charge : MonoBehaviour 
 {
+	public static bool isCharging;
 	public KeyCode keyCode;
 	public GameObject fire;
 	public GameObject fireSpawn;
@@ -16,17 +17,22 @@ public class Charge : MonoBehaviour
 	RaycastHit hit;
 	bool spawning;
 
+	Vector3 lookPosition;
+	Quaternion rotation;
+
+	float turnSpeed = 10;
+
 	void Start () 
 	{
 		anim = GetComponent<Animator> ();
 	}
 
-	void Update () 
+	void FixedUpdate () 
 	{
-		if (TargetObject.target != null && Input.GetKey (keyCode)) 
+		if (TargetObject.target != null && Input.GetKey (keyCode) && !SwingSword.isSwinging) 
 		{	
+			isCharging = true;
 			anim.SetBool ("Charge", true);
-			transform.LookAt (TargetObject.target.transform);
 			if (Vector3.Distance (transform.position, TargetObject.target.transform.position) > .5f) 
 			{
 				if (!spawning) 
@@ -35,11 +41,18 @@ public class Charge : MonoBehaviour
 					StartCoroutine (SpawnFlame ());
 				}
 				Movement.canMove = false;
+
+				lookPosition = TargetObject.target.transform.position - transform.position;
+				lookPosition.y = 0;
+				rotation = Quaternion.LookRotation (lookPosition);
+				transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * turnSpeed);
+
 				GetComponent<CharacterController> ().SimpleMove (transform.forward * chargeSpeed * Time.deltaTime);
 			}
 		} 
 		else 
 		{
+			isCharging = false;
 			anim.SetBool ("Charge", false);
 		}
 	}

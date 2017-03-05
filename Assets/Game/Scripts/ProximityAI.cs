@@ -18,46 +18,63 @@ public class ProximityAI : MonoBehaviour
     public Animator anim;
     NavMeshAgent nav;
 
+	float turnSpeed = 5;
+
+	StatusEffect checkStatus;
+	Vector3 lookPosition;
+	Quaternion rotation;
+
     void Start()
     {
         nav = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<Health>();
         myHealth = GetComponent<Health>();
+		checkStatus = GetComponent<StatusEffect> ();
     }
 
-    void OnTriggerStay(Collider other)
+    public void InRange(Collider other)
     {
-        if(other.tag == "Player")
-        {
-            if (myHealth.health > 0 && player != null)
-            {
-                if (player.activeInHierarchy && myHealth.health > 0)
-                {
-                    transform.LookAt(player.transform);
-                    if (Vector3.Distance(transform.position, player.transform.position) > stoppingDistance)
-                    {
-                        anim.SetBool("Attack", false);
-						nav.SetDestination(player.transform.position);
-                    }
-                    else
-                    {
-                        if (!attacking)
-                        {
-                            attacking = true;
-                            StartCoroutine(Attack());
-                        }
-                    }
-                }
-            }
-            else
-                nav.Stop();
-        }
+		if (!myHealth.isDead && myHealth.health > 0 && player != null)
+		{
+			if (player.activeInHierarchy && myHealth.health > 0) 
+			{
+				lookPosition = player.transform.position - transform.position;
+				lookPosition.y = 0;
+				rotation = Quaternion.LookRotation (lookPosition);
+				transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * turnSpeed);
+
+				if (Vector3.Distance (transform.position, player.transform.position) > stoppingDistance) 
+				{
+					anim.SetBool ("Attack", false);
+					anim.SetBool ("IsWalking", true);
+					nav.SetDestination (player.transform.position);
+				} 
+				else 
+				{
+					if (!attacking) 
+					{
+						attacking = true;
+						StartCoroutine (Attack ());
+					}
+				}
+			}
+		} 
+		else 
+		{
+			anim.SetBool ("IsWalking", true);
+			nav.Stop ();
+		}
     }
 
     IEnumerator Attack()
     {
         anim.SetBool("Attack", true);
+
+		if (Block.isBlocking && !checkStatus.statusEffectActive) 
+		{
+			checkStatus.OnFire (2, 5);
+		}
 
 		if(player.GetComponent<Health>() != null)
         player.GetComponent<Health>().TookDamage(damage);

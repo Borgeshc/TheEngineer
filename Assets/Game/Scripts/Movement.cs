@@ -19,9 +19,9 @@ public class Movement : MonoBehaviour
 		anim = GetComponent<Animator> ();
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
-		if (canMove) 
+		if (canMove && !SwingSword.isSwinging && !Charge.isCharging) 
 		{
 			input = new Vector3 (Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
 			if (input.sqrMagnitude > 1f) 

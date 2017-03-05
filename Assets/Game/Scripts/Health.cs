@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour 
 {
-	public Animator deathAnim;
+	public Animator anim;
 	public float deathTime;
 	public float maxHealth;
 	public bool hasHealthBar;
@@ -14,41 +14,66 @@ public class Health : MonoBehaviour
 	public Image deathPanel;
 	public Text deathText;
 	float timer;
+	bool hitEffect;
+	[HideInInspector]
+	public bool isDead;
+	CapsuleCollider collision;
 
 	void Start()
 	{
 		health = maxHealth;
+		collision = GetComponent<CapsuleCollider> ();
 	}
 
 	public void TookDamage(int damage)
 	{
-		if (transform.tag == "Player" && Block.isBlocking)
-		{
+		if (transform.tag == "Player" && Block.isBlocking) {
 			return;
-		}
-		health = health - damage;
+		} 
+
+		health -= damage;		
 
 		if (hasHealthBar)
 			healthBar.fillAmount = (health / maxHealth);
-		
+
 		if (health <= 0) 
 		{
+			anim.SetBool ("Died", true);
 			StartCoroutine(Died ());
+		}
+
+		if (transform.tag == "Enemy") 
+		{
+			if (!hitEffect) 
+			{
+				hitEffect = true;
+				anim.SetBool ("Hit", true);
+				StartCoroutine (HitEffect ());
+			}
 		}
 	}
 
 	IEnumerator Died()
 	{
-		if (transform.tag == "Enemy" && TargetObject.target == this.gameObject) {
-			transform.GetComponent<SetTarget> ().NotTargeted ();
-			TargetObject.target = null;
+		isDead = true;
+
+		if (transform.tag == "Enemy") 
+		{
+			anim.SetLayerWeight (0, 0);
+			anim.SetLayerWeight (2, 0);
+			anim.SetLayerWeight (3, 0);
+			collision.enabled = false;
+			if(TargetObject.target == this.gameObject)
+			{
+				transform.GetComponent<SetTarget> ().NotTargeted ();
+				TargetObject.target = null;
+			}
 		} 
 		else if (transform.tag == "Player") 
 		{
 			StartCoroutine (Fade ());
 		}
 
-		deathAnim.SetBool ("Died", true);
 		yield return new WaitForSeconds (deathTime);
 		Destroy (gameObject);
 	}
@@ -74,5 +99,12 @@ public class Health : MonoBehaviour
 			return true;
 		else
 			return false;
+	}
+
+	IEnumerator HitEffect()
+	{
+		yield return new WaitForSeconds (.3f);
+		anim.SetBool ("Hit", false);
+		hitEffect = false;
 	}
 }
