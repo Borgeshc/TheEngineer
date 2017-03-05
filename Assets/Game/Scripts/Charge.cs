@@ -53,6 +53,10 @@ public class Charge : MonoBehaviour
 		else 
 		{
 			isCharging = false;
+
+			if(!Movement.canMove)
+			Movement.canMove = true;
+			
 			anim.SetBool ("Charge", false);
 		}
 	}

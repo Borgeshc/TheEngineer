@@ -7,6 +7,8 @@ public class SwingSword : MonoBehaviour
 	public static bool isSwinging;
 	public KeyCode keyCode;
 	public float animationWaitTime;
+	public AudioClip[] swishSounds;
+	public float swishSoundFreq;
 
 	Animator anim;
 	bool attacking;
@@ -18,6 +20,9 @@ public class SwingSword : MonoBehaviour
 	Transform target;
 	Vector3 lookPosition;
 	Quaternion rotation;
+
+	public AudioSource source;
+	bool playingSound;
 
 	float turnSpeed = 10;
 
@@ -59,6 +64,13 @@ public class SwingSword : MonoBehaviour
 					isSwinging = true;
 					weaponDamage.enabled = true;
 					animationType = Random.Range (1, 4);
+
+					if (!playingSound) 
+					{
+						playingSound = true;
+						StartCoroutine(PlaySound ());
+					}
+			
 					anim.SetInteger ("SwingSword", animationType);
 					StartCoroutine (Attack ());
 				}
@@ -77,7 +89,19 @@ public class SwingSword : MonoBehaviour
 	IEnumerator Attack()
 	{
 		yield return new WaitForSeconds (animationWaitTime);
+
 		anim.SetInteger ("SwingSword", 0);
 		attacking = false;
+	}
+
+	IEnumerator PlaySound()
+	{
+		yield return new WaitForSeconds (.3f);
+
+			source.clip = swishSounds [Random.Range (0, swishSounds.Length)];
+			source.Play ();
+
+		yield return new WaitForSeconds (swishSoundFreq);
+		playingSound = false;
 	}
 }

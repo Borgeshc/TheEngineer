@@ -21,7 +21,7 @@ public class Block : MonoBehaviour
 
 	void Update () 
 	{
-		if (Input.GetKey (keyCode) && !SwingSword.isSwinging && !exhausted) 
+		if (Input.GetKey (keyCode) && !SwingSword.isSwinging && !exhausted && !Charge.isCharging) 
 		{
 			blockingMeter.enabled = true;
 			blockingMeter.fillAmount -= (Time.deltaTime * .5f);
