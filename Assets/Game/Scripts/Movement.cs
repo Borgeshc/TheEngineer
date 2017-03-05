@@ -8,6 +8,8 @@ public class Movement : MonoBehaviour
 	public float speed;
 	public float rotationSpeed;
 	public float footStepFreq;
+	public AudioClip leftFoot;
+	public AudioClip rightFoot;
 
 	Vector3 input;
 	Vector3 targetRotation;
@@ -15,6 +17,8 @@ public class Movement : MonoBehaviour
 	CharacterController cc;
 	AudioSource source;
 	Animator anim;
+
+	bool step;
 
 	bool footSteps;
 
@@ -59,7 +63,18 @@ public class Movement : MonoBehaviour
 	IEnumerator FootStepSound()
 	{
 		yield return new WaitForSeconds (footStepFreq);
-		source.Play ();
+		if (!step) 
+		{
+			step = true;
+			source.clip = rightFoot;
+			source.Play ();
+		} 
+		else  if(step)
+		{
+			source.clip = leftFoot;
+			source.Play ();
+			step = false;
+		}
 		footSteps = false;
 	}
 }

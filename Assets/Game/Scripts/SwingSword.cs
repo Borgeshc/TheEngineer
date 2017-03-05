@@ -14,7 +14,6 @@ public class SwingSword : MonoBehaviour
 	bool attacking;
 	int animationType;
 
-	public BoxCollider weaponDamage;
 	CharacterController cc;
 	float speed;
 	Transform target;
@@ -25,13 +24,13 @@ public class SwingSword : MonoBehaviour
 	bool playingSound;
 
 	float turnSpeed = 10;
+	bool damaging;
 
 	void Start()
 	{
 		cc = GetComponent<CharacterController> ();
 		speed = GetComponent<Movement> ().speed;
 		anim = GetComponent<Animator> ();
-		weaponDamage.enabled = false;
 	}
 	void FixedUpdate () 
 	{
@@ -62,7 +61,6 @@ public class SwingSword : MonoBehaviour
 
 					attacking = true;
 					isSwinging = true;
-					weaponDamage.enabled = true;
 					animationType = Random.Range (1, 4);
 
 					if (!playingSound) 
@@ -71,8 +69,8 @@ public class SwingSword : MonoBehaviour
 						StartCoroutine(PlaySound ());
 					}
 			
-					anim.SetInteger ("SwingSword", animationType);
 					StartCoroutine (Attack ());
+					StartCoroutine (DealDamage ());
 				}
 			}
 		} 
@@ -82,16 +80,24 @@ public class SwingSword : MonoBehaviour
 			Movement.canMove = true;
 			
 			isSwinging = false;
-			weaponDamage.enabled = false;
 		}
 	}
 
 	IEnumerator Attack()
 	{
+		anim.SetInteger ("SwingSword", animationType);
 		yield return new WaitForSeconds (animationWaitTime);
 
 		anim.SetInteger ("SwingSword", 0);
 		attacking = false;
+	}
+
+	IEnumerator DealDamage()
+	{
+		yield return new WaitForSeconds (animationWaitTime * .3f);
+			if(TargetObject.target != null)
+			TargetObject.target.GetComponent<Health> ().TookDamage (15);
+		yield return new WaitForSeconds (animationWaitTime * .7f);
 	}
 
 	IEnumerator PlaySound()

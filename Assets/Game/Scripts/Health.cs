@@ -18,6 +18,8 @@ public class Health : MonoBehaviour
 	[HideInInspector]
 	public bool isDead;
 	CapsuleCollider collision;
+	public AudioClip[] hitEffectSounds;
+	public AudioSource source;
 
 	void Start()
 	{
@@ -46,6 +48,8 @@ public class Health : MonoBehaviour
 		{
 			if (!hitEffect) 
 			{
+				source.clip = hitEffectSounds [Random.Range (0, hitEffectSounds.Length)];
+				source.Play ();
 				hitEffect = true;
 				anim.SetBool ("Hit", true);
 				StartCoroutine (HitEffect ());
