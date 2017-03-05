@@ -29,7 +29,7 @@ public class Charge : MonoBehaviour
 
 	void FixedUpdate () 
 	{
-		if (TargetObject.target != null && Input.GetKey (keyCode) && !SwingSword.isSwinging) 
+		if (TargetObject.target != null && Input.GetKey (keyCode) && !SwingSword.isSwinging && !Block.isBlocking) 
 		{	
 			isCharging = true;
 			anim.SetBool ("Charge", true);

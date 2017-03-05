@@ -21,7 +21,7 @@ public class Movement : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if (canMove && !SwingSword.isSwinging && !Charge.isCharging) 
+		if (canMove && !SwingSword.isSwinging && !Charge.isCharging && !Block.isBlocking) 
 		{
 			input = new Vector3 (Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
 			if (input.sqrMagnitude > 1f) 
