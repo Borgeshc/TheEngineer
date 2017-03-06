@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour 
 {
 	public KeyCode inventoryKeyCode;
 	public GameObject inventory;
 	public AudioClip inventorySound;
+	public Text goldText;
 
 	AudioSource source;
 
@@ -17,6 +19,10 @@ public class UIManager : MonoBehaviour
 
 	void Update () 
 	{
+		if (inventory.activeInHierarchy) 
+		{
+			goldText.text = "" + PlayerPrefs.GetInt("Gold");
+		}
 		if (Input.GetKeyDown (inventoryKeyCode)) 
 		{
 			source.clip = inventorySound;

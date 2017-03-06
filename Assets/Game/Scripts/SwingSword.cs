@@ -15,7 +15,7 @@ public class SwingSword : MonoBehaviour
 	int animationType;
 
 	CharacterController cc;
-	float speed;
+	public float speed;
 	Transform target;
 	Vector3 lookPosition;
 	Quaternion rotation;

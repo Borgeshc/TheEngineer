@@ -8,6 +8,7 @@ public class TargetObject : MonoBehaviour
 	public LayerMask layermask;
 	public Texture2D cursorTexture;
 	RaycastHit hit;
+	GameObject goldTarget;
 
 	Ray newRay;
 	void Start()
@@ -18,7 +19,6 @@ public class TargetObject : MonoBehaviour
 	void Update () 
 	{
 		 newRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-		Debug.DrawRay (newRay.origin, newRay.direction* 1000, Color.red);
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask)) 
 		{
 			if (hit.collider.tag == "Enemy") 
@@ -39,6 +39,15 @@ public class TargetObject : MonoBehaviour
 					target.GetComponent<SetTarget> ().NotTargeted ();
 					target = null;
 				}
+			}
+
+			if (hit.collider.tag == "Item") 
+			{
+				if (Input.GetKeyDown (KeyCode.Mouse0) && hit.transform.name == "GoldItem") 
+				{
+					hit.transform.GetComponent<PickUpGold> ().PickUp ();
+				}
+					
 			}
 		}
 	}

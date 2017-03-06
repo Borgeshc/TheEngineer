@@ -67,6 +67,7 @@ public class Health : MonoBehaviour
 
 		if (transform.tag == "Enemy") 
 		{
+			GetComponent<DropsGold> ().DropGold ();
 			xpManager.GainExperience (experienceWorth);
 			anim.SetLayerWeight (0, 0);
 			anim.SetLayerWeight (2, 0);
