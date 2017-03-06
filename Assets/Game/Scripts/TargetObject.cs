@@ -23,8 +23,6 @@ public class TargetObject : MonoBehaviour
 		 newRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask)) 
 		{
-			if(hit.collider.tag != "Enemy" && hit.collider.tag != "Item")
-				Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width /2, cursorMain.height / 2), CursorMode.Auto);
 
 			if (hit.collider.tag == "Enemy") 
 			{
@@ -36,16 +34,6 @@ public class TargetObject : MonoBehaviour
 				hit.transform.GetComponent<SetTarget> ().Targeted ();
 				target = hit.transform.gameObject;
 			}
-				
-
-			if (hit.collider.tag == "Enviornment" || hit.collider.tag == "Ground") 
-			{
-				Cursor.SetCursor (cursorMain, new Vector2 (cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
-				if (target != null) {
-					target.GetComponent<SetTarget> ().NotTargeted ();
-					target = null;
-				}
-			}
 
 			if (hit.collider.tag == "Item") 
 			{
@@ -55,5 +43,7 @@ public class TargetObject : MonoBehaviour
 				}
 			}
 		}
-	}
+        else
+            Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
+    }
 }
