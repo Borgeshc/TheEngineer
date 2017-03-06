@@ -7,6 +7,7 @@ public class PickUpGold : MonoBehaviour
 	AudioSource source;
 	int goldAmount;
 	int oldGold;
+	bool pickedUp;
 
 	void Start()
 	{
@@ -19,10 +20,22 @@ public class PickUpGold : MonoBehaviour
 
 	public void PickUp()
 	{
-		source.Play ();
-		oldGold = PlayerPrefs.GetInt ("Gold");
-		goldAmount = oldGold + goldAmount;
-		PlayerPrefs.SetInt ("Gold", goldAmount);
-		Destroy (gameObject);
+		if (!pickedUp) 
+		{
+			pickedUp = true;
+			source.Play ();
+			oldGold = PlayerPrefs.GetInt ("Gold");
+			goldAmount = oldGold + goldAmount;
+			PlayerPrefs.SetInt ("Gold", goldAmount);
+			Destroy (gameObject);
+		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "Player") 
+		{
+			PickUp ();
+		}	
 	}
 }
