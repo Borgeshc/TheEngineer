@@ -20,10 +20,14 @@ public class Health : MonoBehaviour
 	CapsuleCollider collision;
 	public AudioClip[] hitEffectSounds;
 	public AudioSource source;
+	public float experienceWorth;
+
+	ExperienceManager xpManager;
 
 	void Start()
 	{
 		health = maxHealth;
+		xpManager = GameObject.Find ("GameManager").GetComponent<ExperienceManager> ();
 		collision = GetComponent<CapsuleCollider> ();
 	}
 
@@ -63,6 +67,7 @@ public class Health : MonoBehaviour
 
 		if (transform.tag == "Enemy") 
 		{
+			xpManager.GainExperience (experienceWorth);
 			anim.SetLayerWeight (0, 0);
 			anim.SetLayerWeight (2, 0);
 			anim.SetLayerWeight (3, 0);
@@ -84,10 +89,16 @@ public class Health : MonoBehaviour
 
 	public void GainHealth(float healthGain)
 	{
-		if (health + healthGain < maxHealth)
+		if (health + healthGain < maxHealth) 
+		{
 			health += healthGain;
-		else
+			healthBar.fillAmount = (health / maxHealth);
+		} 
+		else 
+		{
 			health = maxHealth;
+			healthBar.fillAmount = (health / maxHealth);
+		}
 	}
 
 	IEnumerator Fade()
