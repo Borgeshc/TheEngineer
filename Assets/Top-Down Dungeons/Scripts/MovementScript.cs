@@ -10,7 +10,6 @@ public class MovementScript : MonoBehaviour
 	CharacterController cc;
 	public Transform gameObjectToRotate;
 
-	float sensitivity = 2;
 	Vector3 middleOfScreen;
 	Health myHealth;
 	

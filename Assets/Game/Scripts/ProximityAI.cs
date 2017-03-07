@@ -12,7 +12,6 @@ public class ProximityAI : MonoBehaviour
     public int damage;
     public float attackFrequency;
 
-    Health playerHealth;
     bool attacking;
     Health myHealth;
     public Animator anim;
@@ -28,7 +27,6 @@ public class ProximityAI : MonoBehaviour
     {
         nav = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<Health>();
         myHealth = GetComponent<Health>();
 		checkStatus = GetComponent<StatusEffect> ();
     }

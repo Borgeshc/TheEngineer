@@ -14,7 +14,6 @@ public class TargetObject : MonoBehaviour
 	RaycastHit hit;
 	GameObject goldTarget;
 
-	Ray newRay;
 	void Start()
 	{
 		Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width /2, cursorMain.height / 2), CursorMode.Auto);
@@ -22,7 +21,6 @@ public class TargetObject : MonoBehaviour
 
 	void Update () 
 	{
-		 newRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask)) 
 		{
 

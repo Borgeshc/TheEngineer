@@ -22,7 +22,7 @@ private var tempRtA : RenderTexture = null;
 private var tempRtB : RenderTexture = null;
 
 function Supported () : boolean {
-	if(supported) return true;
+	if(supported);
 	supported = (SystemInfo.supportsImageEffects && SystemInfo.supportsRenderTextures && bloomMaterial.shader.isSupported);
 	return supported;
 }

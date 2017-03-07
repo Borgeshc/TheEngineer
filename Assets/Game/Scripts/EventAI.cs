@@ -12,7 +12,6 @@ public class EventAI : MonoBehaviour
 	public int damage;
 	public float attackFrequency;
 
-	Health playerHealth;
 	bool attacking;
 	Health myHealth;
 	public Animator anim;
@@ -22,7 +21,6 @@ public class EventAI : MonoBehaviour
 	{
 		nav = GetComponent<NavMeshAgent> ();
 		player = GameObject.FindGameObjectWithTag ("Player");
-		playerHealth = player.GetComponent<Health> ();
 		myHealth = GetComponent<Health> ();
 	}
 

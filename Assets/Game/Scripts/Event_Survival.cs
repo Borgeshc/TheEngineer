@@ -65,7 +65,7 @@ public class Event_Survival : MonoBehaviour
 
 	IEnumerator Spawn()
 	{
-		GameObject enemy = Instantiate(enemies[Random.Range(0, enemies.Count)], spawnpoints[Random.Range(0, spawnpoints.Count)].transform.position, Quaternion.identity) as GameObject;
+		Instantiate(enemies[Random.Range(0, enemies.Count)], spawnpoints[Random.Range(0, spawnpoints.Count)].transform.position, Quaternion.identity);
 		yield return new WaitForSeconds (spawnFrequency);
 		spawning = false;
 	}
