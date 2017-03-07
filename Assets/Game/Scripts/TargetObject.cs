@@ -9,6 +9,8 @@ public class TargetObject : MonoBehaviour
 	public Texture2D cursorMain;
 	public Texture2D cursorAttack;
 	public Texture2D cursorLoot;
+
+	public GameObject vendorObject;
 	RaycastHit hit;
 	GameObject goldTarget;
 
