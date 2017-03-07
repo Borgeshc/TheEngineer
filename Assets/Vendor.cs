@@ -5,20 +5,24 @@ using UnityEngine;
 public class Vendor : MonoBehaviour 
 {
 	public GameObject vendor;
+    public GameObject inventory;
 	public GameObject player;
+    public GameObject[] vendorSlots;
+    public GameObject[] vendorItems;
 
-	void Start()
-	{
-	}
+    Inventory myInventory;
 
-	void Update()
-	{
-	}
-	void OnTriggerEnter(Collider other)
+    void Start()
+    {
+        myInventory = inventory.GetComponent<Inventory>();
+    }
+
+    void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Player") 
 		{
 			vendor.SetActive (true);
+            inventory.SetActive(true);
 		}
 	}
 
@@ -27,7 +31,13 @@ public class Vendor : MonoBehaviour
 		if (other.tag == "Player") 
 		{
 			vendor.SetActive (false);
+            inventory.SetActive(false);
 		}
 	}
 
+    public void VendorSlot(int slotNumber)
+    {
+        print("VendorSlot " + slotNumber + " clicked!");
+        myInventory.AddItem(vendorItems[slotNumber]);
+    }
 }
