@@ -35,9 +35,8 @@ public class Vendor : MonoBehaviour
 		}
 	}
 
-    public void VendorSlot(int slotNumber)
+    public void VendorSlot(int item)
     {
-        print("VendorSlot " + slotNumber + " clicked!");
-        myInventory.AddItem(vendorItems[slotNumber]);
+        myInventory.AddItem(vendorItems[item]);
     }
 }
