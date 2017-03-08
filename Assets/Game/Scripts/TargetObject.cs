@@ -16,7 +16,7 @@ public class TargetObject : MonoBehaviour
 
 	void Start()
 	{
-		Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width /2, cursorMain.height / 2), CursorMode.Auto);
+		Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
 	}
 
 	void Update () 
@@ -44,6 +44,6 @@ public class TargetObject : MonoBehaviour
 			}
 		}
         else
-            Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
+			Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
     }
 }

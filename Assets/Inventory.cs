@@ -35,7 +35,8 @@ public class Inventory : MonoBehaviour
                     {
                         Destroy(child.gameObject);
                     }
-                    clone.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
+                    clone.GetComponent<RectTransform>().sizeDelta = new Vector2(90, 90);
+					Destroy(clone.GetComponent<Button>());
                     inventoryItems.Add(itemName, clone);
                     itemStacking[i]++;
                     slots[i].transform.FindChild("StackCount").GetComponent<Text>().text = itemStacking[i].ToString();
@@ -57,6 +58,7 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem(GameObject itemToRemove)
     {
+		print ("Remove Item called");
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i] == itemToRemove)
