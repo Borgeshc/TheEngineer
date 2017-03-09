@@ -10,9 +10,11 @@ public class Inventory : MonoBehaviour
     public List<GameObject> itemsInInventory;
     public int[] itemStacking;
     Dictionary<string, GameObject> inventoryItems;
+	ItemEffects itemEffects;
 
     void Start()
     {
+		itemEffects = GameObject.FindGameObjectWithTag ("Player").GetComponent<ItemEffects>();
         itemStacking = new int[slots.Length];
         itemsInInventory = new List<GameObject>(slots.Length);
         inventoryItems = new Dictionary<string, GameObject>();
@@ -23,7 +25,6 @@ public class Inventory : MonoBehaviour
         string itemName = itemToAdd.name;
         for (int i = 0; i < slots.Length; i++)
         {
-            print(i);
             if (!inventoryItems.ContainsKey(itemName))
             {
                 if (slots[i].transform.FindChild("HoldItem").transform.childCount > 0)
@@ -35,20 +36,19 @@ public class Inventory : MonoBehaviour
                     {
                         Destroy(child.gameObject);
                     }
+					clone.name = itemName;
                     clone.GetComponent<RectTransform>().sizeDelta = new Vector2(90, 90);
+					clone.GetComponent<Image> ().raycastTarget = false;
 					Destroy(clone.GetComponent<Button>());
                     inventoryItems.Add(itemName, clone);
                     itemStacking[i]++;
                     slots[i].transform.FindChild("StackCount").GetComponent<Text>().text = itemStacking[i].ToString();
-                    
-                    print(itemToAdd.name);
                     return;
                 }
             }
             else if(inventoryItems.ContainsKey(itemName))
             {
                 int index = Convert.ToInt32(inventoryItems[itemName].transform.parent.transform.parent.name.Substring(13));
-                print(index);
                 itemStacking[index - 1]++;
                 slots[index - 1].transform.FindChild("StackCount").GetComponent<Text>().text = itemStacking[index -1].ToString();
                 return;
@@ -58,19 +58,28 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem(GameObject itemToRemove)
     {
-		print ("Remove Item called");
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i] == itemToRemove)
-            {
-                itemStacking[i]--;
-                if(itemStacking[i] < 0)
-                {
-                    Destroy(itemToRemove);
-                }
-                else
-                    slots[i].transform.FindChild("StackCount").GetComponent<Text>().text = itemStacking[i].ToString();
-            }
-        }
+		string itemName = itemToRemove.name;
+		itemEffects.UsedItem (itemName);
+		for (int i = 0; i < slots.Length; i++) 
+		{
+			if (inventoryItems.ContainsKey (itemName)) 
+			{
+				int index = Convert.ToInt32(inventoryItems[itemName].transform.parent.transform.parent.name.Substring(13));
+				if (itemStacking [index - 1] > 1) 
+				{
+					itemStacking [index - 1]--;
+					slots [index - 1].transform.FindChild ("StackCount").GetComponent<Text> ().text = itemStacking [index - 1].ToString ();
+					return;
+				} 
+				else 
+				{
+					itemStacking[index - 1]--;
+					slots[index - 1].transform.FindChild("StackCount").GetComponent<Text>().text = "";
+					inventoryItems.Remove (itemName);
+					Destroy (itemToRemove);
+					return;
+				}
+			}
+		}
     }
 }
