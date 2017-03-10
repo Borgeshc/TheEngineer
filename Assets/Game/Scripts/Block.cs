@@ -32,9 +32,14 @@ public class Block : MonoBehaviour
 			blockingMeter.enabled = true;
 			blockingMeter.fillAmount -= (Time.deltaTime * .5f);
 
-			if (blockingMeter.fillAmount <= 0)
+			if (blockingMeter.fillAmount <= 0) 
+			{
 				exhausted = true;
-			
+
+				abilityManager.abilityInProgress = false;
+
+				isBlocking = false;
+			}
 			Movement.canMove = false;
 			shieldEffect.SetActive (true);
 			anim.SetBool ("Block", true);

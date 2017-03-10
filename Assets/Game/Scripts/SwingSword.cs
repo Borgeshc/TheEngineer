@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwingSword : MonoBehaviour 
 {
@@ -8,6 +9,11 @@ public class SwingSword : MonoBehaviour
 	public float animationWaitTime;
 	public AudioClip[] swishSounds;
 	public float swishSoundFreq;
+	public float furyPerAttack;
+	public int damage;
+	public float furyGain;
+	public ResourceManager resourceManager;
+
 
 	Animator anim;
 	bool attacking;
@@ -26,6 +32,7 @@ public class SwingSword : MonoBehaviour
 	bool damaging;
 	AbilityManager abilityManager;
 	bool isSwinging;
+	bool dealingDamage;
 
 	void Start()
 	{
@@ -67,9 +74,12 @@ public class SwingSword : MonoBehaviour
 						playingSound = true;
 						StartCoroutine (PlaySound ());
 					}
-			
+						
 					StartCoroutine (Attack ());
-					StartCoroutine (DealDamage ());
+					if (!dealingDamage) {
+						dealingDamage = true;
+						StartCoroutine (DealDamage ());
+					}
 				}
 			}
 		
@@ -99,10 +109,13 @@ public class SwingSword : MonoBehaviour
 
 	IEnumerator DealDamage()
 	{
-		yield return new WaitForSeconds (animationWaitTime * .3f);
-			if(TargetObject.target != null)
-			TargetObject.target.GetComponent<Health> ().TookDamage (15);
+
 		yield return new WaitForSeconds (animationWaitTime * .7f);
+			if(TargetObject.target != null)
+			TargetObject.target.GetComponent<Health> ().TookDamage (damage);
+		yield return new WaitForSeconds (animationWaitTime * .3f);
+
+		dealingDamage = false;
 	}
 
 	IEnumerator PlaySound()
@@ -112,6 +125,7 @@ public class SwingSword : MonoBehaviour
 			source.clip = swishSounds [Random.Range (0, swishSounds.Length)];
 			source.Play ();
 
+		resourceManager.GainResource (furyGain);
 		yield return new WaitForSeconds (swishSoundFreq);
 		playingSound = false;
 	}
