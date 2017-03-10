@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Charge : MonoBehaviour 
 {
-	public static bool isCharging;
 	public KeyCode keyCode;
 	public GameObject fire;
 	public GameObject fireSpawn;
@@ -17,21 +16,29 @@ public class Charge : MonoBehaviour
 	RaycastHit hit;
 	bool spawning;
 
+	AbilityManager abilityManager;
 	Vector3 lookPosition;
 	Quaternion rotation;
+	public static bool isCharging;
 
 	float turnSpeed = 10;
 
 	void Start () 
 	{
 		anim = GetComponent<Animator> ();
+		abilityManager = GetComponent<AbilityManager> ();
 	}
 
 	void FixedUpdate () 
 	{
-		if (TargetObject.target != null && Input.GetKey (keyCode) && !SwingSword.isSwinging && !Block.isBlocking) 
-		{	
+		if (Input.GetKeyDown (keyCode) && !abilityManager.abilityInProgress) 
+		{
+			abilityManager.abilityInProgress = true;
 			isCharging = true;
+		}
+
+		if (TargetObject.target != null && abilityManager.abilityInProgress && isCharging) 
+		{	
 			anim.SetBool ("Charge", true);
 			if (Vector3.Distance (transform.position, TargetObject.target.transform.position) > .5f) 
 			{
@@ -52,12 +59,16 @@ public class Charge : MonoBehaviour
 		} 
 		else 
 		{
-			isCharging = false;
 
 			if(!Movement.canMove)
 			Movement.canMove = true;
 			
 			anim.SetBool ("Charge", false);
+		}
+
+		if (Input.GetKeyUp (keyCode)) {
+			isCharging = false;
+			abilityManager.abilityInProgress = false;
 		}
 	}
 

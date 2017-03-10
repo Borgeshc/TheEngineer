@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
 	CharacterController cc;
 	AudioSource source;
 	Animator anim;
+	AbilityManager abilityManager;
 
 	bool step;
 
@@ -25,6 +26,7 @@ public class Movement : MonoBehaviour
 	void Start () 
 	{
 		canMove = true;
+		abilityManager = GetComponent<AbilityManager> ();
 		cc = GetComponent<CharacterController> ();
 		anim = GetComponent<Animator> ();
 		source = GetComponent<AudioSource> ();
@@ -32,7 +34,7 @@ public class Movement : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if (canMove && !SwingSword.isSwinging && !Block.isBlocking && !Charge.isCharging) 
+		if (canMove && !abilityManager.abilityInProgress) 
 		{
 
 			input = new Vector3 (Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));

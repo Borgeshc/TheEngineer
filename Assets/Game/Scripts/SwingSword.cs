@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SwingSword : MonoBehaviour 
 {
-	public static bool isSwinging;
 	public KeyCode keyCode;
 	public float animationWaitTime;
 	public AudioClip[] swishSounds;
@@ -25,19 +24,25 @@ public class SwingSword : MonoBehaviour
 
 	float turnSpeed = 10;
 	bool damaging;
+	AbilityManager abilityManager;
+	bool isSwinging;
 
 	void Start()
 	{
+		abilityManager = GetComponent<AbilityManager> ();
 		cc = GetComponent<CharacterController> ();
 		speed = GetComponent<Movement> ().speed;
 		anim = GetComponent<Animator> ();
 	}
 	void FixedUpdate () 
 	{
-		if (Input.GetKey (keyCode) && !Block.isBlocking && !Charge.isCharging) 
+		if (Input.GetKeyDown (keyCode) && !abilityManager.abilityInProgress) 
 		{
-			if (TargetObject.target != null) 
-			{
+			abilityManager.abilityInProgress = true;
+			isSwinging = true;
+		}
+		if (abilityManager.abilityInProgress && isSwinging) {
+			if (TargetObject.target != null) {
 				target = TargetObject.target.transform;
 
 				lookPosition = target.transform.position - transform.position;
@@ -46,39 +51,39 @@ public class SwingSword : MonoBehaviour
 				transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * turnSpeed);
 			}
 
-			if (!attacking) 
-			{
+			if (!attacking) {
 				Movement.canMove = false;
-				if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) > 1) 
-				{
+				if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) > 1 && !Charge.isCharging) {
 
 					anim.SetBool ("IsWalking", true);
 					cc.SimpleMove (transform.forward * speed * Time.deltaTime);
-				} 
-				else 
-				{
+				} else {
 					anim.SetBool ("IsWalking", false);
 
 					attacking = true;
-					isSwinging = true;
 					animationType = Random.Range (1, 4);
 
-					if (!playingSound) 
-					{
+					if (!playingSound) {
 						playingSound = true;
-						StartCoroutine(PlaySound ());
+						StartCoroutine (PlaySound ());
 					}
 			
 					StartCoroutine (Attack ());
 					StartCoroutine (DealDamage ());
 				}
 			}
+		
 		} 
 		else 
 		{
 			if(!Movement.canMove)
 			Movement.canMove = true;
 			
+		}
+
+		if (Input.GetKeyUp (keyCode)) {
+			abilityManager.abilityInProgress = false;
+
 			isSwinging = false;
 		}
 	}

@@ -9,7 +9,7 @@ public class Block : MonoBehaviour
 	public KeyCode keyCode;
 	public GameObject shieldEffect;
 	public Image blockingMeter;
-
+	AbilityManager abilityManager;
 	Animator anim;
 	bool exhausted;
 
@@ -17,11 +17,17 @@ public class Block : MonoBehaviour
 	{
 		anim = GetComponent<Animator> ();
 		blockingMeter.enabled = false;
+		abilityManager = GetComponent<AbilityManager> ();
 	}
 
 	void Update () 
 	{
-		if (Input.GetKey (keyCode) && !SwingSword.isSwinging && !exhausted && !Charge.isCharging) 
+		if (Input.GetKeyDown (keyCode) && !abilityManager.abilityInProgress) 
+		{
+			abilityManager.abilityInProgress = true;
+			isBlocking = true;
+		}
+		if (abilityManager.abilityInProgress && isBlocking) 
 		{
 			blockingMeter.enabled = true;
 			blockingMeter.fillAmount -= (Time.deltaTime * .5f);
@@ -30,7 +36,6 @@ public class Block : MonoBehaviour
 				exhausted = true;
 			
 			Movement.canMove = false;
-			isBlocking = true;
 			shieldEffect.SetActive (true);
 			anim.SetBool ("Block", true);
 		} 
@@ -45,12 +50,17 @@ public class Block : MonoBehaviour
 					blockingMeter.enabled = false;
 					exhausted = false;
 				}
-			
-			isBlocking = false;
+
 			shieldEffect.SetActive (false);
 			anim.SetBool ("Block", false);
 
 			blockingMeter.fillAmount += Time.deltaTime;
+		}
+
+		if (Input.GetKeyUp (keyCode)) {
+			abilityManager.abilityInProgress = false;
+
+			isBlocking = false;
 		}
 	}
 }
