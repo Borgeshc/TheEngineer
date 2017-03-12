@@ -21,6 +21,7 @@ public class Health : MonoBehaviour
 	public AudioClip[] hitEffectSounds;
 	public AudioSource source;
 	public float experienceWorth;
+	bool isImmune;
 
 	ExperienceManager xpManager;
 
@@ -33,7 +34,7 @@ public class Health : MonoBehaviour
 
 	public void TookDamage(int damage)
 	{
-		if (transform.tag == "Player" && Block.isBlocking) {
+		if (transform.tag == "Player" && Block.isBlocking || transform.tag == "Player" && isImmune) {
 			return;
 		} 
 
@@ -100,6 +101,31 @@ public class Health : MonoBehaviour
 			health = maxHealth;
 			healthBar.fillAmount = (health / maxHealth);
 		}
+	}
+
+	public IEnumerator GainHealthOverTime(float healthGain)
+	{
+		for (int i = 0; i < 10; i++) 
+		{
+			if (health + healthGain < maxHealth) 
+			{
+				health += healthGain;
+				healthBar.fillAmount = (health / maxHealth);
+			} 
+			else 
+			{
+				health = maxHealth;
+				healthBar.fillAmount = (health / maxHealth);
+			}
+			yield return new WaitForSeconds (1);
+		}
+	}
+
+	public IEnumerator Immune()
+	{
+		isImmune = true;
+		yield return new WaitForSeconds (10);
+		isImmune = false;
 	}
 
 	IEnumerator Fade()
