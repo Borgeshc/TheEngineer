@@ -40,5 +40,16 @@ public class UIManager : MonoBehaviour
 			//source.Play ();
 			skills.SetActive (!skills.activeSelf);
 		}
+
+
+		if (DevMode.devMove) 
+		{
+			if (Input.GetKeyDown (KeyCode.R)) 
+			{
+				PlayerPrefs.SetInt ("Gold", 0);
+				goldText.text = "" + PlayerPrefs.GetInt("Gold");
+				print ("Gold Reset");
+			}
+		}
 	}
 }
