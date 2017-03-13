@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cleave : MonoBehaviour 
+public class Cleave : Ability 
 {
 	public KeyCode keyCode;
 	public float animationCooldown;

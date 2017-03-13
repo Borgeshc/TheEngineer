@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Block : MonoBehaviour 
+public class Block : Ability 
 {
 	public static bool isBlocking;
 	public KeyCode keyCode;

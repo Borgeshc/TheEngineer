@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Charge : MonoBehaviour 
+public class Charge : Ability 
 {
 	public KeyCode keyCode;
 	public GameObject fire;

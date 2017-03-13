@@ -9,6 +9,10 @@ public class UIManager : MonoBehaviour
 	public GameObject inventory;
 	public AudioClip inventorySound;
 	public Text goldText;
+	[Space]
+	public KeyCode skillsKeyCode;
+	public GameObject skills;
+	//public AudioClip skillsSound;
 
 	AudioSource source;
 
@@ -28,6 +32,13 @@ public class UIManager : MonoBehaviour
 			source.clip = inventorySound;
 			source.Play ();
 			inventory.SetActive (!inventory.activeSelf);
+		}
+
+		if (Input.GetKeyDown (skillsKeyCode)) 
+		{
+			//source.clip = skillsSound;
+			//source.Play ();
+			skills.SetActive (!skills.activeSelf);
 		}
 	}
 }
