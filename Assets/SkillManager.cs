@@ -7,6 +7,7 @@ public class SkillManager : MonoBehaviour
 {
 	public Text skillPointsText;
 	public GameObject notEnough;
+	public GameObject[] abilities;
 	int skillPoints;
 	bool canBuy;
 
@@ -14,6 +15,15 @@ public class SkillManager : MonoBehaviour
 	{
 		skillPoints = PlayerPrefs.GetInt ("SkillPoints");
 		skillPointsText.text = "Skill Points: " + skillPoints;
+
+		for (int i = 0; i < abilities.Length; i++) 
+		{
+			string newString = "Ability" + i;
+			if (PlayerPrefs.GetInt (newString) == 1) 
+			{
+				abilities [i].GetComponent<Image> ().color = Color.white; // DOES NOT WORK
+			}
+		}
 	}
 
 	public void GainSkillPoint()
@@ -32,6 +42,17 @@ public class SkillManager : MonoBehaviour
 				PlayerPrefs.SetInt ("SkillPoints", 0);
 				skillPoints = PlayerPrefs.GetInt ("SkillPoints");
 				skillPointsText.text = "Skill Points: " + skillPoints;
+
+				for (int i = 0; i < abilities.Length; i++) 
+				{
+					string newString = "Ability" + i;
+					if (PlayerPrefs.GetInt (newString) == 1) 
+					{
+						PlayerPrefs.SetInt (newString, 0);
+					}
+				}
+
+				print ("Reset Abilities and Skill Points");
 			}
 		}
 	}
@@ -67,6 +88,14 @@ public class SkillManager : MonoBehaviour
 		skillPointsText.text = "3/3";
 	}
 
+	public void UnlockedAbility(int ability)
+	{
+		if (canBuy) 
+		{
+			string newString = "Ability" + ability;
+			PlayerPrefs.SetInt (newString, 1);
+		}
+	}
 	IEnumerator NotEnough()
 	{
 		notEnough.SetActive (true);
