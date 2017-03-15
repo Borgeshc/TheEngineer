@@ -74,6 +74,12 @@ public class Health : MonoBehaviour
 			anim.SetLayerWeight (2, 0);
 			anim.SetLayerWeight (3, 0);
 			collision.enabled = false;
+			if (TargetObject.highlightedTargets.Contains (gameObject))
+				TargetObject.highlightedTargets.Remove (gameObject);
+
+			if (CombatManager.inCombat)
+				CombatManager.inCombat = false;
+			
 			if(TargetObject.target == this.gameObject)
 			{
 				transform.GetComponent<SetTarget> ().NotTargeted ();

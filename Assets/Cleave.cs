@@ -10,6 +10,8 @@ public class Cleave : Ability
 	public GameObject cleaveEffect;
 	public float furyCost;
 	public ResourceManager resourceManager;
+	public AudioClip cleaveSound;
+	public AudioSource source;
 
 	AbilityManager abilityManager;
 	Animator anim;
@@ -53,10 +55,15 @@ public class Cleave : Ability
 			spendingFury = true;
 			resourceManager.CostResource (furyCost);
 		}
-		anim.SetBool ("Cleave", true);
-		yield return new WaitForSeconds (effectTimer);
 		cleaveEffect.SetActive (true);
+
+		anim.SetBool ("Cleave", true);
+		yield return new WaitForSeconds (.1f);
+
+			source.clip = cleaveSound;
+		source.Play ();
 		yield return new WaitForSeconds (animationCooldown);
+
 		anim.SetBool ("Cleave", false);
 		cleaveEffect.SetActive (false);
 		attacking = false;

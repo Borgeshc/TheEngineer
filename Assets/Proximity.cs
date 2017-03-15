@@ -8,7 +8,19 @@ public class Proximity : MonoBehaviour
 	{
 		if (other.tag == "Player") 
 		{
+			if (!CombatManager.inCombat)
+				CombatManager.inCombat = true;
+			
 			GetComponentInParent<ProximityAI> ().InRange(other);
+		}
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Player")
+		{
+			if (CombatManager.inCombat)
+				CombatManager.inCombat = false;
 		}
 	}
 }

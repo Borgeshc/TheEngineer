@@ -14,7 +14,6 @@ public class SwingSword : MonoBehaviour
 	public float furyGain;
 	public ResourceManager resourceManager;
 
-
 	Animator anim;
 	bool attacking;
 	int animationType;
@@ -30,71 +29,48 @@ public class SwingSword : MonoBehaviour
 
 	float turnSpeed = 10;
 	bool damaging;
-	AbilityManager abilityManager;
-	bool isSwinging;
 	bool dealingDamage;
+	float storeSpeed;
 
 	void Start()
 	{
-		abilityManager = GetComponent<AbilityManager> ();
 		cc = GetComponent<CharacterController> ();
-		speed = GetComponent<Movement> ().speed;
+		storeSpeed = GetComponent<Movement> ().speed;
 		anim = GetComponent<Animator> ();
+		speed = storeSpeed;
 	}
-	void FixedUpdate () 
+	void FixedUpdate ()
 	{
-		if (Input.GetKeyDown (keyCode) && !abilityManager.abilityInProgress) 
-		{
-			abilityManager.abilityInProgress = true;
-			isSwinging = true;
-		}
-		if (abilityManager.abilityInProgress && isSwinging) {
-			if (TargetObject.target != null) {
-				target = TargetObject.target.transform;
+		if (TargetObject.target != null) {
+			if (Input.GetKeyDown (keyCode)) {
+				if (TargetObject.target != null) {
+					target = TargetObject.target.transform;
 
-				lookPosition = target.transform.position - transform.position;
-				lookPosition.y = 0;
-				rotation = Quaternion.LookRotation (lookPosition);
-				transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * turnSpeed);
-			}
+					lookPosition = target.transform.position - transform.position;
+					lookPosition.y = 0;
+					rotation = Quaternion.LookRotation (lookPosition);
+					transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * turnSpeed);
+				}
 
-			if (!attacking) {
-				Movement.canMove = false;
-				if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) > 1 && !Charge.isCharging) {
+				if (!attacking) {
+					if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) < 2 && !Charge.isCharging) {
+						anim.SetBool ("IsWalking", false);
+						speed = 0;
+						attacking = true;
+						animationType = Random.Range (1, 4);
 
-					anim.SetBool ("IsWalking", true);
-					cc.SimpleMove (transform.forward * speed * Time.deltaTime);
-				} else {
-					anim.SetBool ("IsWalking", false);
-
-					attacking = true;
-					animationType = Random.Range (1, 4);
-
-					if (!playingSound) {
-						playingSound = true;
-						StartCoroutine (PlaySound ());
-					}
-						
-					StartCoroutine (Attack ());
-					if (!dealingDamage) {
-						dealingDamage = true;
-						StartCoroutine (DealDamage ());
+						if (!playingSound) {
+							playingSound = true;
+							StartCoroutine (PlaySound ());
+						}
+						StartCoroutine (Attack ());
+						if (!dealingDamage) {
+							dealingDamage = true;
+							StartCoroutine (DealDamage ());
+						}
 					}
 				}
 			}
-		
-		} 
-		else 
-		{
-			if(!Movement.canMove)
-			Movement.canMove = true;
-			
-		}
-
-		if (Input.GetKeyUp (keyCode)) {
-			abilityManager.abilityInProgress = false;
-
-			isSwinging = false;
 		}
 	}
 
@@ -114,7 +90,6 @@ public class SwingSword : MonoBehaviour
 			if(TargetObject.target != null)
 			TargetObject.target.GetComponent<Health> ().TookDamage (damage);
 		yield return new WaitForSeconds (animationWaitTime * .3f);
-
 		dealingDamage = false;
 	}
 

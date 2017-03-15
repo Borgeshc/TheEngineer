@@ -13,28 +13,33 @@ public class TargetObject : MonoBehaviour
 	public GameObject vendorObject;
 	RaycastHit hit;
 	GameObject goldTarget;
+	public static List<GameObject> highlightedTargets;
 
 	void Start()
 	{
+		highlightedTargets = new List<GameObject> ();
 		Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
 	}
 
 	void Update () 
 	{
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask)) 
+		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask))
 		{
-
 			if (hit.collider.tag == "Enemy") 
 			{
 				Cursor.SetCursor (cursorAttack, new Vector2 (cursorAttack.width / 2, cursorAttack.height / 2), CursorMode.Auto);
-				if (target != null) {
+				if (target != null) 
+				{
 					target.GetComponent<SetTarget> ().NotTargeted ();
 					target = null;
 				}
 				hit.transform.GetComponent<SetTarget> ().Targeted ();
-				target = hit.transform.gameObject;
-			}
 
+				if(!highlightedTargets.Contains(hit.transform.gameObject))
+				highlightedTargets.Add( hit.transform.gameObject);
+
+						target = hit.transform.gameObject;
+			}
 			if (hit.collider.tag == "Item") 
 			{
 				Cursor.SetCursor (cursorLoot, new Vector2 (cursorLoot.width / 2, cursorLoot.height / 2), CursorMode.Auto);
@@ -42,8 +47,17 @@ public class TargetObject : MonoBehaviour
 					hit.transform.GetComponent<PickUpGold> ().PickUp ();
 				}
 			}
+		
 		}
-        else
-			Cursor.SetCursor(cursorMain, new Vector2(cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
+		else 
+		{
+			Cursor.SetCursor (cursorMain, new Vector2 (cursorMain.width / 2, cursorMain.height / 2), CursorMode.Auto);
+			target = null;
+
+			if (highlightedTargets != null)
+				foreach (GameObject targets in highlightedTargets) {
+					targets.GetComponent<SetTarget> ().NotTargeted ();
+				}
+		}
     }
 }
