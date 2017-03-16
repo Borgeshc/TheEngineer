@@ -70,8 +70,12 @@ public class ClickToMove : MonoBehaviour
 
 				if (playerPlane.Raycast (ray, out hitdist)) 
 				{
-					if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask)) 
-					{
+					if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask)) {
+
+						if (hit.transform.tag == "Item") 
+						{
+							return;
+						}
 						if (hit.transform.tag == "Enemy") {
 
 							Vector3 tarPos = ray.GetPoint (hitdist);
@@ -80,13 +84,14 @@ public class ClickToMove : MonoBehaviour
 							//	myTransform.rotation = Quaternion.Slerp (myTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 							myTransform.rotation = tarRot;
 						}
-					}
+					} else {
 
-					Vector3 targetPoint = ray.GetPoint (hitdist);
-					destinationPosition = ray.GetPoint (hitdist);
-					Quaternion targetRotation = Quaternion.LookRotation (targetPoint - transform.position);
-				//	myTransform.rotation = Quaternion.Slerp (myTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-					myTransform.rotation = targetRotation;
+						Vector3 targetPoint = ray.GetPoint (hitdist);
+						destinationPosition = ray.GetPoint (hitdist);
+						Quaternion targetRotation = Quaternion.LookRotation (targetPoint - transform.position);
+						//	myTransform.rotation = Quaternion.Slerp (myTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+						myTransform.rotation = targetRotation;
+					}
 				}
 			}
 

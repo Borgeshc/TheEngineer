@@ -11,6 +11,7 @@ public class Vendor : MonoBehaviour
     public GameObject[] vendorItems;
 
     Inventory myInventory;
+	bool canBuy;
 
     void Start()
     {
@@ -37,6 +38,26 @@ public class Vendor : MonoBehaviour
 
     public void VendorSlot(int item)
     {
+		StartCoroutine (CheckingGold ());
+
+		if(canBuy)
         myInventory.AddItem(vendorItems[item]);
     }
+
+	public void GoldAmount(int goldAmt)
+	{
+		int oldGold = PlayerPrefs.GetInt ("Gold");
+		if (oldGold - goldAmt < 0)
+			canBuy = false;
+		else {
+			canBuy = true;
+			oldGold -= goldAmt;
+			PlayerPrefs.SetInt ("Gold", oldGold);
+		}
+	}
+
+	IEnumerator CheckingGold()
+	{
+		yield return new WaitForSeconds (.1f);
+	}
 }
