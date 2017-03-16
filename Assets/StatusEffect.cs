@@ -6,6 +6,10 @@ public class StatusEffect : MonoBehaviour
 {
 	public bool statusEffectActive;
 	public GameObject fireEffect;
+	public int minDamage;
+	public int maxDamage;
+	public int criticalNumber;
+	int damage;
 	int statusCounter;
 
 	Coroutine takingFireDamage;
@@ -31,10 +35,20 @@ public class StatusEffect : MonoBehaviour
 	{
 		for (int i = _statusLength; i > 0; i--) 
 		{
-			health.TookDamage (_damage);
+			health.TookDamage (CritChance(),damage);
 			yield return new WaitForSeconds (1);
 		}
 		statusEffectActive = false;
 		fireEffect.SetActive (false);
+	}
+
+	bool CritChance()
+	{
+		int damageAmount = Random.Range (minDamage, maxDamage);
+		damage = damageAmount; 
+		if (damageAmount < criticalNumber)
+			return false;
+		else
+			return true;
 	}
 }

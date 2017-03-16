@@ -13,6 +13,8 @@ public class Health : MonoBehaviour
 	public float health;
 	public Image deathPanel;
 	public Text deathText;
+	public GameObject combatText;
+
 	float timer;
 	bool hitEffect;
 	[HideInInspector]
@@ -34,7 +36,7 @@ public class Health : MonoBehaviour
 
 	public void TookDamage(int damage)
 	{
-		if (transform.tag == "Player" && Block.isBlocking || transform.tag == "Player" && isImmune) {
+		if (Block.isBlocking || isImmune) {
 			return;
 		} 
 
@@ -48,9 +50,29 @@ public class Health : MonoBehaviour
 			anim.SetBool ("Died", true);
 			StartCoroutine(Died ());
 		}
+	}
 
-		if (transform.tag == "Enemy") 
+	public void TookDamage( bool isCrit, int damage)
 		{
+
+		if (!isCrit) {
+			CombatText (damage.ToString ()).GetComponent<Animator> ().SetTrigger ("CBT");
+
+		} else {
+			CombatText (damage.ToString ()).GetComponent<Animator> ().SetTrigger ("Crit");
+		}
+		
+			health -= damage;		
+
+			if (hasHealthBar)
+				healthBar.fillAmount = (health / maxHealth);
+
+			if (health <= 0) 
+			{
+				anim.SetBool ("Died", true);
+				StartCoroutine(Died ());
+			}
+
 			if (!hitEffect) 
 			{
 				source.clip = hitEffectSounds [Random.Range (0, hitEffectSounds.Length)];
@@ -59,7 +81,6 @@ public class Health : MonoBehaviour
 				anim.SetBool ("Hit", true);
 				StartCoroutine (HitEffect ());
 			}
-		}
 	}
 
 	IEnumerator Died()
@@ -154,5 +175,19 @@ public class Health : MonoBehaviour
 		yield return new WaitForSeconds (.3f);
 		anim.SetBool ("Hit", false);
 		hitEffect = false;
+	}
+
+	GameObject CombatText(string damageText)
+	{
+		GameObject cbt = Instantiate (combatText) as GameObject;
+		RectTransform cbtTransform = cbt.GetComponent<RectTransform> ();
+		cbt.transform.SetParent (transform.FindChild ("Canvas"));
+		cbtTransform.transform.localPosition = combatText.transform.localPosition;
+		cbtTransform.transform.localScale = combatText.transform.localScale;
+		cbtTransform.transform.localRotation = combatText.transform.localRotation;
+
+		cbt.GetComponent<Text> ().text = damageText;
+		Destroy (cbt.gameObject, 2);
+		return cbt;
 	}
 }

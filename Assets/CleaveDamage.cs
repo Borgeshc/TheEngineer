@@ -4,13 +4,27 @@ using UnityEngine;
 
 public class CleaveDamage : MonoBehaviour 
 {
-	public int cleaveDamage;
+	public int minDamage;
+	public int maxDamage;
+	public int criticalNumber;
+	int damage;
 
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Enemy") 
 		{
-			other.GetComponent<Health> ().TookDamage(cleaveDamage);
+			other.GetComponent<Health> ().TookDamage (CritChance(),damage);
 		}
+	}
+
+
+	bool CritChance()
+	{
+		int damageAmount = Random.Range (minDamage, maxDamage);
+		damage = damageAmount; 
+		if (damageAmount < criticalNumber)
+			return false;
+		else
+			return true;
 	}
 }

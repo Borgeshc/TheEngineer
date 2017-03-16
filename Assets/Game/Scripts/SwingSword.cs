@@ -10,7 +10,9 @@ public class SwingSword : MonoBehaviour
 	public AudioClip[] swishSounds;
 	public float swishSoundFreq;
 	public float furyPerAttack;
-	public int damage;
+	public int minDamage;
+	public int maxDamage;
+	public int criticalNumber;
 	public float furyGain;
 	public ResourceManager resourceManager;
 
@@ -31,6 +33,7 @@ public class SwingSword : MonoBehaviour
 	bool damaging;
 	bool dealingDamage;
 	float storeSpeed;
+	int damage;
 
 	void Start()
 	{
@@ -63,10 +66,10 @@ public class SwingSword : MonoBehaviour
 							playingSound = true;
 							StartCoroutine (PlaySound ());
 						}
-						StartCoroutine (Attack ());
 						if (!dealingDamage) {
 							dealingDamage = true;
 							StartCoroutine (DealDamage ());
+						StartCoroutine (Attack ());
 						}
 					}
 				}
@@ -85,10 +88,9 @@ public class SwingSword : MonoBehaviour
 
 	IEnumerator DealDamage()
 	{
-
 		yield return new WaitForSeconds (animationWaitTime * .7f);
-			if(TargetObject.target != null)
-			TargetObject.target.GetComponent<Health> ().TookDamage (damage);
+		if(TargetObject.target != null)
+			TargetObject.target.GetComponent<Health> ().TookDamage (CritChance(),damage);
 		yield return new WaitForSeconds (animationWaitTime * .3f);
 		dealingDamage = false;
 	}
@@ -103,5 +105,15 @@ public class SwingSword : MonoBehaviour
 		resourceManager.GainResource (furyGain);
 		yield return new WaitForSeconds (swishSoundFreq);
 		playingSound = false;
+	}
+
+	bool CritChance()
+	{
+		int damageAmount = Random.Range (minDamage, maxDamage);
+		damage = damageAmount; 
+		if (damageAmount < criticalNumber)
+			return false;
+		else
+			return true;
 	}
 }
