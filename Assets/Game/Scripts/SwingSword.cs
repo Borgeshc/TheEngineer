@@ -48,20 +48,24 @@ public class SwingSword : MonoBehaviour
 			if (Input.GetKeyDown (keyCode)) {
 				if (TargetObject.target != null) {
 					target = TargetObject.target.transform;
-
+					print ("looking for target " + TargetObject.target);
 					lookPosition = target.transform.position - transform.position;
 					lookPosition.y = 0;
 					rotation = Quaternion.LookRotation (lookPosition);
 					transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * turnSpeed);
 				}
 
-				if (!attacking) {
-					if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) < 2 && !Charge.isCharging) {
+				if (!attacking) 
+				{
+					if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) < 2 && !Charge.isCharging) 
+					{
+						print ("Attempting to Attack");
 						anim.SetBool ("IsWalking", false);
 						speed = 0;
 						attacking = true;
 						animationType = Random.Range (1, 4);
 
+						StartCoroutine (Attack ());
 						if (!playingSound) {
 							playingSound = true;
 							StartCoroutine (PlaySound ());
@@ -69,7 +73,6 @@ public class SwingSword : MonoBehaviour
 						if (!dealingDamage) {
 							dealingDamage = true;
 							StartCoroutine (DealDamage ());
-						StartCoroutine (Attack ());
 						}
 					}
 				}

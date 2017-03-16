@@ -37,8 +37,7 @@ public class TargetObject : MonoBehaviour
 
 				if(!highlightedTargets.Contains(hit.transform.gameObject))
 				highlightedTargets.Add( hit.transform.gameObject);
-
-						target = hit.transform.gameObject;
+				target = hit.transform.gameObject;
 			}
 			if (hit.collider.tag == "Item") 
 			{
