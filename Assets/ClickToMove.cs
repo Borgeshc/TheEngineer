@@ -42,6 +42,8 @@ public class ClickToMove : MonoBehaviour
 
 	void FixedUpdate () 
 	{
+		if (!canMove)
+			anim.SetBool ("IsWalking", false);
 		if (canMove && !abilityManager.abilityInProgress) 
 		{
 
@@ -121,7 +123,7 @@ public class ClickToMove : MonoBehaviour
 					footSteps = true;
 					StartCoroutine (FootStepSound ());
 				}
-				if(!Input.GetKey(KeyCode.LeftShift))
+				if(!Input.GetKey(KeyCode.LeftShift) || canMove)
 				anim.SetBool ("IsWalking", true);
 				
 				cc.SimpleMove (transform.forward * moveSpeed * Time.deltaTime);

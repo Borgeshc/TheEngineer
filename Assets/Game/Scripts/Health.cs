@@ -87,7 +87,7 @@ public class Health : MonoBehaviour
 	{
 		isDead = true;
 
-		if (transform.tag == "Enemy") 
+		if (transform.tag == "Enemy" || transform.tag == "Dragon") 
 		{
 			GetComponent<DropsGold> ().DropGold ();
 			xpManager.GainExperience (experienceWorth);

@@ -25,14 +25,18 @@ public class TargetObject : MonoBehaviour
 	{
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 1000, layermask))
 		{
-			if (hit.collider.tag == "Enemy") 
+			if (hit.collider.tag == "Enemy" || hit.collider.tag == "Dragon") 
 			{
 				Cursor.SetCursor (cursorAttack, new Vector2 (cursorAttack.width / 2, cursorAttack.height / 2), CursorMode.Auto);
+
 				if (target != null) 
 				{
+					if(target.GetComponent<SetTarget>() != null)
 					target.GetComponent<SetTarget> ().NotTargeted ();
+					
 					target = null;
 				}
+				if(hit.transform.GetComponent<SetTarget>() != null)
 				hit.transform.GetComponent<SetTarget> ().Targeted ();
 
 				if(!highlightedTargets.Contains(hit.transform.gameObject))
@@ -55,6 +59,7 @@ public class TargetObject : MonoBehaviour
 
 			if (highlightedTargets != null)
 				foreach (GameObject targets in highlightedTargets) {
+					if(targets.GetComponent<SetTarget>() != null)
 					targets.GetComponent<SetTarget> ().NotTargeted ();
 				}
 		}

@@ -57,26 +57,35 @@ public class SwingSword : MonoBehaviour
 
 				if (!attacking) 
 				{
-					if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) < 2 && !Charge.isCharging) 
+					if (TargetObject.target.tag == "Dragon" && TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) < 5 && !Charge.isCharging) 
 					{
-						print ("Attempting to Attack");
-						anim.SetBool ("IsWalking", false);
-						speed = 0;
-						attacking = true;
-						animationType = Random.Range (1, 4);
-
-						StartCoroutine (Attack ());
-						if (!playingSound) {
-							playingSound = true;
-							StartCoroutine (PlaySound ());
-						}
-						if (!dealingDamage) {
-							dealingDamage = true;
-							StartCoroutine (DealDamage ());
-						}
+						HandleAttack ();
+					}
+					else if (TargetObject.target != null && Vector3.Distance (transform.position, TargetObject.target.transform.position) < 2 && !Charge.isCharging) 
+					{
+						HandleAttack ();
 					}
 				}
 			}
+		}
+	}
+
+	void HandleAttack()
+	{
+		print ("Attempting to Attack");
+		anim.SetBool ("IsWalking", false);
+		speed = 0;
+		attacking = true;
+		animationType = Random.Range (1, 4);
+
+		StartCoroutine (Attack ());
+		if (!playingSound) {
+			playingSound = true;
+			StartCoroutine (PlaySound ());
+		}
+		if (!dealingDamage) {
+			dealingDamage = true;
+			StartCoroutine (DealDamage ());
 		}
 	}
 

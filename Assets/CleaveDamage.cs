@@ -11,7 +11,7 @@ public class CleaveDamage : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.tag == "Enemy") 
+		if (other.tag == "Enemy" || other.tag == "Dragon") 
 		{
 			other.GetComponent<Health> ().TookDamage (CritChance(),damage);
 		}
