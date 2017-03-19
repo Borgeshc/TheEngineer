@@ -9,14 +9,17 @@ public class DamageOnStay : MonoBehaviour
 
 	void OnTriggerStay(Collider other)
 	{
-		if (other.tag == "Enemy") 
-		{
-			if (!dealingDamage) 
-			{
-				dealingDamage = true;
-				StartCoroutine (DealDamage (other.gameObject));
-			}
-		}
+        if(other.transform.GetComponent<Health>() != null && other.transform.GetComponent<Health>().health > 0 && gameObject.activeInHierarchy)
+        {
+            if (other.tag == "Enemy" || other.tag == "Player")
+            {
+                if (!dealingDamage)
+                {
+                    dealingDamage = true;
+                    StartCoroutine(DealDamage(other.gameObject));
+                }
+            }
+        }
 	}
 
 	IEnumerator DealDamage(GameObject enemy)

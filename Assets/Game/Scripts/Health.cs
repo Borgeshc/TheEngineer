@@ -85,15 +85,16 @@ public class Health : MonoBehaviour
 
 	IEnumerator Died()
 	{
-		isDead = true;
 
-		if (transform.tag == "Enemy" || transform.tag == "Dragon") 
-		{
-			GetComponent<DropsGold> ().DropGold ();
+		if (transform.tag == "Enemy" || transform.tag == "Dragon" && isDead == false)
+        {
+            isDead = true;
+            GetComponent<DropsGold> ().DropGold ();
 			xpManager.GainExperience (experienceWorth);
 			anim.SetLayerWeight (0, 0);
 			anim.SetLayerWeight (2, 0);
 			anim.SetLayerWeight (3, 0);
+            if(collision != null)
 			collision.enabled = false;
 			if (TargetObject.highlightedTargets.Contains (gameObject))
 				TargetObject.highlightedTargets.Remove (gameObject);
@@ -103,6 +104,7 @@ public class Health : MonoBehaviour
 			
 			if(TargetObject.target == this.gameObject)
 			{
+                if(transform.GetComponent<SetTarget>() != null)
 				transform.GetComponent<SetTarget> ().NotTargeted ();
 				TargetObject.target = null;
 			}
@@ -113,6 +115,7 @@ public class Health : MonoBehaviour
 		}
 
 		yield return new WaitForSeconds (deathTime);
+        if(transform.tag != "Dragon")
 		Destroy (gameObject);
 	}
 
