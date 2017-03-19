@@ -73,7 +73,7 @@ public class Health : MonoBehaviour
 				StartCoroutine(Died ());
 			}
 
-			if (!hitEffect) 
+			if (!hitEffect && health > 0) 
 			{
 				source.clip = hitEffectSounds [Random.Range (0, hitEffectSounds.Length)];
 				source.Play ();
