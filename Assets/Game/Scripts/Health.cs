@@ -67,7 +67,7 @@ public class Health : MonoBehaviour
 			if (hasHealthBar)
 				healthBar.fillAmount = (health / maxHealth);
 
-			if (health <= 0) 
+		if (health <= 0 && isDead == false) 
 			{
 				anim.SetBool ("Died", true);
 				StartCoroutine(Died ());

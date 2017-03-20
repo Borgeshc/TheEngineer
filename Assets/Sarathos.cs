@@ -117,7 +117,7 @@ public class Sarathos : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 2);
         anim.SetBool("IsFlyAttacking", true);
         fireBreath.SetActive(true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         anim.SetBool("IsFlyAttacking", false);
         fireBreath.SetActive(false);
         anim.SetBool("IsLanding", true);

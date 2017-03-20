@@ -24,8 +24,14 @@ public class GroundFires : MonoBehaviour
     {
         if (other.tag == "FireBreath" && other.gameObject.activeInHierarchy)
         {
-            groundFire.SetActive(true);
-            GetComponent<DamageOnStay>().damage = 5;
+			StartCoroutine (SetOnFire ());
         }
     }
+
+	IEnumerator SetOnFire()
+	{
+		yield return new WaitForSeconds (2);
+		groundFire.SetActive(true);
+		GetComponent<DamageOnStay>().damage = 5;
+	}
 }
